@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap'); 
+*, *::before, *::after { 
+    padding: 0; 
+    margin: 0; 
+    scroll-behavior: smooth;
+    outline: none;
+    user-select: none;
+} 
+ 
+body { 
+    background-color: #0e2222; 
+    color: #fff; 
+    font-family: "Unbounded", sans-serif; 
+    user-select: none;
+    outline: none;
+} 
+ 
+/* Nav Bar */ 
+ 
+header nav { 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 20px 40px; 
+    animation: fadeInDown .8s; 
+    outline: none;
+} 
+ 
+header nav .header_links ul { 
+    display: flex; 
+    flex-wrap: wrap; 
+    flex-direction: row; 
+    user-select: none;
+    outline: none;
+} 
+ 
+header nav .header_links ul li, section.main ul li { 
+    list-style-type: none; 
+    user-select: none;
+    outline: none;
+} 
+ 
+header nav .header_links ul li a { 
+    outline: none; 
+    text-decoration: none; 
+    color: #a6a8b8; 
+    padding: 5px 12px; 
+    transition: 0.3s all; 
+    font-size: 15px; 
+    user-select: none;
+} 
+ 
+header nav .header_links ul li a:hover { 
+    color: white; 
+} 
+ 
+header nav .header_logo img { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 100%; 
+    object-fit: cover; 
+    border: 5px solid #3b3d4e93; 
+    cursor: pointer; 
+    user-select: none;
+} 
+ 
+/* Responsive nav bar */ 
+ 
+@media only screen and (max-width: 630px) { 
+    header nav { 
+        display: flex; 
+        flex-direction: column; 
+    } 
+    header nav .header_logo { 
+        margin-bottom: 20px; 
+    } 
+} 
+ 
+@media only screen and (max-width: 320px) { 
+    header nav .header_links ul { 
+        display: flex; 
+        justify-content: center; 
+        text-align: center; 
+        align-items: center; 
+        flex-direction: row; 
+        flex-wrap: wrap; 
+    } 
+} 
+ 
+/* Main */ 
+ 
+section.main { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    min-height: 70vh; 
+    animation: fadeInUp .8s; 
+    user-select: none;
+} 
+ 
+section.main img { 
+    width: 150px; 
+    height: 150px; 
+    border-radius: 100%; 
+    object-fit: cover; 
+    border: 10px solid #0c1a1a; 
+    cursor: pointer; 
+    margin-bottom: 10px; 
+    user-select: none;
+    outline: none;
+} 
+ 
+section.main span { 
+    color: #fffffe; 
+    font-size: 30px; 
+    font-weight: bold; 
+} 
+ 
+section.main p { 
+    position: relative; 
+    top: 50%; 
+    border-right: 2px solid rgba(255, 255, 255, .75); 
+    white-space: nowrap; 
+    overflow: hidden; 
+    color: #94a1b2; 
+    font-size: 13px; 
+    animation: typewriter 4s steps(44) 1s 1 normal both, blinkTextCursor 530ms steps(44) infinite normal; 
+} 
+ 
+section.main ul { 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    outline: none;
+} 
+ 
+section.main ul li a { 
+    color: #a6a8b8; 
+    display: flex; 
+    text-decoration: none; 
+    margin: 20px 5px; 
+    font-size: 25px; 
+    padding: 5px; 
+    transition: 0.2s all; 
+    outline: none;
+} 
+ 
+section.main ul li a:hover { 
+    transition: 0.2s all; 
+    color: #fff; 
+    outline: none;
+} 
+ 
+@keyframes typewriter { 
+    from { 
+        width: 0; 
+    } 
+    to { 
+        width: 30.8em; 
+    } 
+} 
+ 
+@keyframes blinkTextCursor { 
+    from { 
+        border-right-color: rgba(255, 255, 255, .75); 
+        user-select: none;
+    } 
+    to { 
+        border-right-color: transparent; 
+        user-select: none;
+    } 
+} 
+ 
+@keyframes fadeInUp { 
+    from { 
+        transform: translate3d(0, 150px, 0) 
+    } 
+    to { 
+        transform: translate3d(0, 0, 0); 
+        opacity: 1 
+    } 
+} 
+ 
+@keyframes fadeInDown { 
+    from { 
+        transform: translate3d(0, -150px, 0) 
+    } 
+    to { 
+        transform: translate3d(0, 0, 0); 
+        opacity: 1 
+    } 
+}
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar li {
+  float: left;
+  display: inline-block;
+}
+
+.navbar li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.navbar li a:hover {
+  background-color: #111;
+}
+.makepageadv {
+    position: fixed; /* Фиксирует элемент относительно окна */
+    bottom: 10px; /* Отступ от нижнего края */
+    right: 10px; /* Отступ от правого края */
+    
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #ddd; /* Граница */
+    border-radius: 10px; /* Скругленные углы */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    max-width: 300px; /* Ограничение ширины */
+    word-wrap: break-word; /* Перенос текста */
+    text-align: center; /* Центрирование текста */
+    font-size: 100%; /* Размер текста */
+    z-index: 1000; /* Расположение поверх других элементов */
+    direction: ltr; /* Убедитесь, что текстовое направление слева направо */
+	
+}
+a{
+	text-decoration: none;
+}
+@media only screen and (max-width: 480px) {
+    .makepageadv {
+        bottom: 5px;
+        right: 5px;
+        max-width: 90%; /* Увеличить ширину для маленьких экранов */
+        font-size: 12px; /* Уменьшить размер текста */
+    }
+}
+.projectsbtn {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 999;
+	background-color: #111;
+}
+
+.projectsbtn:hover .dropdown-content {
+    display: block;
+}
+
+
