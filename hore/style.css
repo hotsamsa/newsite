@@ -52,3 +52,15 @@ body {
     max-width: 100%;
 }
 
+footer {
+    padding: 0px;
+    margin: 0px;
+}
+
+.box {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+}
+
+
