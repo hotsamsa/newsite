@@ -1,244 +1,45 @@
-﻿<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <link rel="icon" href="assets/favicon.svg" type="svg">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Виртуальные валентинки</title>
+<html lang="en">
+
+<head> <!-- do not touch! -->
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <title>It's Samsa!</title>
 </head>
-<body>
-    <div class="bg">
-        <div class="orb orb-a"></div>
-        <div class="orb orb-b"></div>
-        <div class="orb orb-c"></div>
-    </div>
 
-    <header class="header">
-        <a class="logo" href="./"><img src="assets/logo.png" alt="Логотип"></a>
-        <div class="brand">
-            <div class="eyebrow">14 февраля</div>
-            <h1>Виртуальные валентинки</h1>
-        </div>
-        <a class="btn ghost" href="https://hotsamsawithoneui.t.me">Telegram</a>
+<body> <!-- site -->
+    <header>
+        <div class="head">
+            <div class="logo">
+                <a class="logo" href="#"><img src="assets/icon.png" alt="logo"></a>
+            </div>
+            <h1>Это Самса!</h1>
+            <a class="btn" href="hore/">Hore</a>
+            <a class="btn" href="https://hotsamsawithoneui.t.me">Telegram</a>
     </header>
-
-    <main class="container">
-        <section class="card" id="builder">
-            <div class="card-head">
-                <h2>Создай свою валентинку</h2>
-                <p>Заполни поля, получи ссылку и отправь её тому, кто тебе важен.</p>
-            </div>
-            <form class="form" id="valentine-form">
-                <label>
-                    Имя получателя
-                    <input type="text" id="toName" placeholder="Например: Алина" maxlength="40" required>
-                </label>
-                <label>
-                    Пожелания
-                    <textarea id="wishes" placeholder="Напиши пару тёплых слов" maxlength="240" required></textarea>
-                </label>
-                <label>
-                    Твоё имя (необязательно)
-                    <input type="text" id="fromName" placeholder="От кого валентинка" maxlength="40">
-                </label>
-                <div class="image-block">
-                    <div class="image-title">Картинка для валентинки (необязательно)</div>
-                    <label class="file-label">
-                        Загрузить файл через Catbox
-                        <input type="file" id="imageFile" accept="image/*">
-                    </label>
-                    <div class="image-row">
-                        <button class="btn small ghost" type="button" id="uploadBtn">Загрузить файл</button>
-                        <span class="upload-status" id="uploadStatus">Файл не выбран.</span>
-                    </div>
-                    <label>
-                        Или вставь прямую ссылку на картинку
-                        <input type="url" id="imageUrl" placeholder="https://..." maxlength="500">
-                    </label>
-                    <div class="image-preview" id="imagePreview" hidden>
-                        <img id="previewImg" alt="Предпросмотр">
-                    </div>
-                </div>
-                <button class="btn" type="submit">Сгенерировать ссылку</button>
-            </form>
-
-            <div class="result" id="linkBox" hidden>
-                <div class="result-row">
-                    <input id="shareLink" type="text" readonly>
-                    <button class="btn small" id="copyBtn" type="button">Скопировать</button>
-                </div>
-                <div class="hint" id="copyHint">Ссылка готова — отправь её.</div>
-            </div>
-        </section>
+    <hr>
+    <main>
+        <p class="info"><b>Привет, это Самса!</b> Если ты видишь эту страничку, ты попал в корень сайта горячей самсы!
+        </p>
+        <img src="assets/samsa.jpg" alt="samsa">
+        <hr>
+        <h2 class="info">Расскажу немного о себе:</h2>
+        <p class="info">Я 13-летний блогер из Москвы (родом из Балаково), знаю такие языки програмирования, как:</p>
+        <ul class="info">
+            <li>HTML/CSS</li>
+            <li>Python</li>
+            <li>XAML/C# (пишу приложения для W10M)</li>
+        </ul>
+        <h3 class="info">Буду рад, если ты подпишешься на мой ТГК: <a
+                href="https://hotsamsawithoneui.t.me/">@hotsamsawithoneui</a></h3>
+        <hr>
+        <h2 class="info">Все проекты:</h2>
+        <ul class="info">
+            <li><a href="hore/index.html">Hore Browser</a></li>
+            <li><a href="bio/index.html">Мои соцсети</a></li>
+            <li><a href="oldbio/index.html">Первая страница</a></li>
+        </ul>
     </main>
+</body> <!-- created by hot samsa: t.me/hotsamsawithoneui -->
 
-    <footer class="footer">
-        <span>Сделано с любовью <a href="https://hotsamsawithoneui.t.me">горячей самсой</a></span>
-    </footer>
-
-    <script>
-        const form = document.getElementById('valentine-form');
-        const linkBox = document.getElementById('linkBox');
-        const shareLink = document.getElementById('shareLink');
-        const copyBtn = document.getElementById('copyBtn');
-        const copyHint = document.getElementById('copyHint');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const uploadStatus = document.getElementById('uploadStatus');
-        const imageFile = document.getElementById('imageFile');
-        const imageUrl = document.getElementById('imageUrl');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImg = document.getElementById('previewImg');
-
-        let uploadedImageUrl = '';
-
-        const setPreview = (url) => {
-            if (!url) {
-                imagePreview.hidden = true;
-                previewImg.removeAttribute('src');
-                return;
-            }
-            previewImg.src = url;
-            imagePreview.hidden = false;
-        };
-
-        imageUrl.addEventListener('input', () => {
-            uploadedImageUrl = '';
-            if (imageUrl.value.trim()) {
-                setPreview(imageUrl.value.trim());
-                uploadStatus.textContent = 'Используется ссылка.';
-            } else {
-                setPreview('');
-                uploadStatus.textContent = 'Файл не выбран.';
-            }
-        });
-
-        imageFile.addEventListener('change', () => {
-            uploadedImageUrl = '';
-            if (imageFile.files.length) {
-                uploadStatus.textContent = 'Файл выбран, нажми «Загрузить файл».';
-                const localUrl = URL.createObjectURL(imageFile.files[0]);
-                setPreview(localUrl);
-            } else {
-                uploadStatus.textContent = 'Файл не выбран.';
-                setPreview(imageUrl.value.trim());
-            }
-        });
-
-        const uploadToCatbox = async () => {
-            if (!imageFile.files.length) {
-                return '';
-            }
-
-            const formData = new FormData();
-            formData.append('reqtype', 'fileupload');
-            formData.append('fileToUpload', imageFile.files[0]);
-
-            uploadStatus.textContent = 'Загружаю на Catbox...';
-            const response = await fetch('https://catbox.moe/user/api.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const text = (await response.text()).trim();
-            if (!response.ok || !text.startsWith('http')) {
-                throw new Error('upload_failed');
-            }
-
-            uploadedImageUrl = text;
-            imageUrl.value = '';
-            setPreview(text);
-            uploadStatus.textContent = 'Загружено на Catbox.';
-            return text;
-        };
-
-        uploadBtn.addEventListener('click', async () => {
-            if (!imageFile.files.length) {
-                uploadStatus.textContent = 'Сначала выбери файл.';
-                return;
-            }
-
-            uploadBtn.disabled = true;
-            try {
-                await uploadToCatbox();
-            } catch (error) {
-                uploadStatus.textContent = 'Не удалось загрузить. Вставь ссылку вручную.';
-            } finally {
-                uploadBtn.disabled = false;
-            }
-        });
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            const toName = document.getElementById('toName').value.trim();
-            const wishes = document.getElementById('wishes').value.trim();
-            const fromName = document.getElementById('fromName').value.trim();
-            const fallbackImageUrl = imageUrl.value.trim();
-
-            if (!toName || !wishes) {
-                return;
-            }
-
-            const buildUrl = (imageLink) => {
-                const nextParams = new URLSearchParams();
-                nextParams.set('to', toName);
-                nextParams.set('wish', wishes);
-                if (fromName) {
-                    nextParams.set('from', fromName);
-                }
-                if (imageLink) {
-                    nextParams.set('img', imageLink);
-                }
-
-                const baseUrl = new URL(window.location.href);
-                baseUrl.pathname = baseUrl.pathname.replace(/[^\/]*$/, '');
-                const cardUrl = new URL('valentine.html', baseUrl);
-                cardUrl.search = nextParams.toString();
-                return cardUrl.toString();
-            };
-
-            const finalize = (imageLink) => {
-                const url = buildUrl(imageLink);
-                shareLink.value = url;
-                linkBox.hidden = false;
-                copyHint.textContent = 'Ссылка готова — отправь её.';
-
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(url).then(() => {
-                        copyHint.textContent = 'Ссылка скопирована в буфер обмена.';
-                    }).catch(() => {
-                        copyHint.textContent = 'Не удалось скопировать, сделай это вручную.';
-                    });
-                }
-            };
-
-            if (imageFile.files.length && !uploadedImageUrl) {
-                uploadBtn.disabled = true;
-                uploadToCatbox()
-                    .then((link) => finalize(link))
-                    .catch(() => {
-                        uploadStatus.textContent = 'Не удалось загрузить. Используем ссылку, если она есть.';
-                        finalize(fallbackImageUrl);
-                    })
-                    .finally(() => {
-                        uploadBtn.disabled = false;
-                    });
-                return;
-            }
-
-            finalize(uploadedImageUrl || fallbackImageUrl);
-        });
-
-        copyBtn.addEventListener('click', () => {
-            shareLink.select();
-            shareLink.setSelectionRange(0, shareLink.value.length);
-            const copied = document.execCommand('copy');
-            copyHint.textContent = copied ? 'Ссылка скопирована в буфер обмена.' : 'Не удалось скопировать, сделай это вручную.';
-        });
-    </script>
-</body>
 </html>
