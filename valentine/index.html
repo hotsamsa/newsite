@@ -47,22 +47,18 @@
                 </label>
                 <div class="image-block">
                     <div class="image-title">Картинка для валентинки (необязательно)</div>
-                    <label class="file-label">
-                        Загрузить файл через Catbox
-                        <input type="file" id="imageFile" accept="image/*">
-                    </label>
-                    <div class="image-row">
-                        <button class="btn small ghost" type="button" id="uploadBtn">Загрузить файл</button>
-                        <span class="upload-status" id="uploadStatus">Файл не выбран.</span>
-                    </div>
                     <label>
-                        Или вставь прямую ссылку на картинку
+                        Вставь прямую ссылку на картинку
                         <input type="url" id="imageUrl" placeholder="https://..." maxlength="500">
                     </label>
                     <div class="image-preview" id="imagePreview" hidden>
                         <img id="previewImg" alt="Предпросмотр">
                     </div>
                 </div>
+                <label class="checkbox">
+                    <input type="checkbox" id="shortenToggle" checked>
+                    Сократить ссылку через clck.ru
+                </label>
                 <button class="btn" type="submit">Сгенерировать ссылку</button>
             </form>
 
@@ -71,6 +67,7 @@
                     <input id="shareLink" type="text" readonly>
                     <button class="btn small" id="copyBtn" type="button">Скопировать</button>
                 </div>
+                <button class="btn small ghost" id="fullBtn" type="button">Показать полную ссылку</button>
                 <div class="hint" id="copyHint">Ссылка готова — отправь её.</div>
             </div>
         </section>
@@ -85,15 +82,15 @@
         const linkBox = document.getElementById('linkBox');
         const shareLink = document.getElementById('shareLink');
         const copyBtn = document.getElementById('copyBtn');
+        const fullBtn = document.getElementById('fullBtn');
         const copyHint = document.getElementById('copyHint');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const uploadStatus = document.getElementById('uploadStatus');
-        const imageFile = document.getElementById('imageFile');
+        const shortenToggle = document.getElementById('shortenToggle');
         const imageUrl = document.getElementById('imageUrl');
         const imagePreview = document.getElementById('imagePreview');
         const previewImg = document.getElementById('previewImg');
 
-        let uploadedImageUrl = '';
+        let lastFullUrl = '';
+        let lastShortUrl = '';
 
         const setPreview = (url) => {
             if (!url) {
@@ -106,131 +103,96 @@
         };
 
         imageUrl.addEventListener('input', () => {
-            uploadedImageUrl = '';
-            if (imageUrl.value.trim()) {
-                setPreview(imageUrl.value.trim());
-                uploadStatus.textContent = 'Используется ссылка.';
-            } else {
-                setPreview('');
-                uploadStatus.textContent = 'Файл не выбран.';
-            }
+            setPreview(imageUrl.value.trim());
         });
 
-        imageFile.addEventListener('change', () => {
-            uploadedImageUrl = '';
-            if (imageFile.files.length) {
-                uploadStatus.textContent = 'Файл выбран, нажми «Загрузить файл».';
-                const localUrl = URL.createObjectURL(imageFile.files[0]);
-                setPreview(localUrl);
-            } else {
-                uploadStatus.textContent = 'Файл не выбран.';
-                setPreview(imageUrl.value.trim());
-            }
-        });
-
-        const uploadToCatbox = async () => {
-            if (!imageFile.files.length) {
+        const shortenUrl = async (longUrl) => {
+            try {
+                const body = new URLSearchParams({ url: longUrl });
+                const response = await fetch('https://clck.ru/--', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body
+                });
+                const text = (await response.text()).trim();
+                if (response.ok && text.startsWith('http')) {
+                    return text;
+                }
+            } catch (error) {
                 return '';
             }
 
-            const formData = new FormData();
-            formData.append('reqtype', 'fileupload');
-            formData.append('fileToUpload', imageFile.files[0]);
-
-            uploadStatus.textContent = 'Загружаю на Catbox...';
-            const response = await fetch('https://catbox.moe/user/api.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const text = (await response.text()).trim();
-            if (!response.ok || !text.startsWith('http')) {
-                throw new Error('upload_failed');
+            try {
+                const response = await fetch(`https://clck.ru/--?url=${encodeURIComponent(longUrl)}`);
+                const text = (await response.text()).trim();
+                if (response.ok && text.startsWith('http')) {
+                    return text;
+                }
+            } catch (error) {
+                return '';
             }
 
-            uploadedImageUrl = text;
-            imageUrl.value = '';
-            setPreview(text);
-            uploadStatus.textContent = 'Загружено на Catbox.';
-            return text;
+            return '';
         };
 
-        uploadBtn.addEventListener('click', async () => {
-            if (!imageFile.files.length) {
-                uploadStatus.textContent = 'Сначала выбери файл.';
-                return;
-            }
+        const setLinkOutput = (url, hint) => {
+            shareLink.value = url;
+            linkBox.hidden = false;
+            copyHint.textContent = hint;
 
-            uploadBtn.disabled = true;
-            try {
-                await uploadToCatbox();
-            } catch (error) {
-                uploadStatus.textContent = 'Не удалось загрузить. Вставь ссылку вручную.';
-            } finally {
-                uploadBtn.disabled = false;
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url).then(() => {
+                    copyHint.textContent = 'Ссылка скопирована в буфер обмена.';
+                }).catch(() => {
+                    copyHint.textContent = 'Не удалось скопировать, сделай это вручную.';
+                });
             }
-        });
+        };
 
-        form.addEventListener('submit', (event) => {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const toName = document.getElementById('toName').value.trim();
             const wishes = document.getElementById('wishes').value.trim();
             const fromName = document.getElementById('fromName').value.trim();
-            const fallbackImageUrl = imageUrl.value.trim();
+            const imageLink = imageUrl.value.trim();
 
             if (!toName || !wishes) {
                 return;
             }
 
-            const buildUrl = (imageLink) => {
-                const nextParams = new URLSearchParams();
-                nextParams.set('to', toName);
-                nextParams.set('wish', wishes);
-                if (fromName) {
-                    nextParams.set('from', fromName);
+            const nextParams = new URLSearchParams();
+            nextParams.set('to', toName);
+            nextParams.set('wish', wishes);
+            if (fromName) {
+                nextParams.set('from', fromName);
+            }
+            if (imageLink) {
+                nextParams.set('img', imageLink);
+            }
+
+            const baseUrl = new URL(window.location.href);
+            baseUrl.pathname = baseUrl.pathname.replace(/[^\/]*$/, '');
+            const cardUrl = new URL('valentine.html', baseUrl);
+            cardUrl.search = nextParams.toString();
+            lastFullUrl = cardUrl.toString();
+            lastShortUrl = '';
+
+            if (shortenToggle.checked) {
+                setLinkOutput(lastFullUrl, 'Сокращаю ссылку...');
+                const shortUrl = await shortenUrl(lastFullUrl);
+                if (shortUrl) {
+                    lastShortUrl = shortUrl;
+                    setLinkOutput(shortUrl, 'Ссылка готова — отправь её.');
+                } else {
+                    setLinkOutput(lastFullUrl, 'Не удалось сократить. Вот полная ссылка.');
                 }
-                if (imageLink) {
-                    nextParams.set('img', imageLink);
-                }
-
-                const baseUrl = new URL(window.location.href);
-                baseUrl.pathname = baseUrl.pathname.replace(/[^\/]*$/, '');
-                const cardUrl = new URL('valentine.html', baseUrl);
-                cardUrl.search = nextParams.toString();
-                return cardUrl.toString();
-            };
-
-            const finalize = (imageLink) => {
-                const url = buildUrl(imageLink);
-                shareLink.value = url;
-                linkBox.hidden = false;
-                copyHint.textContent = 'Ссылка готова — отправь её.';
-
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(url).then(() => {
-                        copyHint.textContent = 'Ссылка скопирована в буфер обмена.';
-                    }).catch(() => {
-                        copyHint.textContent = 'Не удалось скопировать, сделай это вручную.';
-                    });
-                }
-            };
-
-            if (imageFile.files.length && !uploadedImageUrl) {
-                uploadBtn.disabled = true;
-                uploadToCatbox()
-                    .then((link) => finalize(link))
-                    .catch(() => {
-                        uploadStatus.textContent = 'Не удалось загрузить. Используем ссылку, если она есть.';
-                        finalize(fallbackImageUrl);
-                    })
-                    .finally(() => {
-                        uploadBtn.disabled = false;
-                    });
                 return;
             }
 
-            finalize(uploadedImageUrl || fallbackImageUrl);
+            setLinkOutput(lastFullUrl, 'Ссылка готова — отправь её.');
         });
 
         copyBtn.addEventListener('click', () => {
@@ -238,6 +200,12 @@
             shareLink.setSelectionRange(0, shareLink.value.length);
             const copied = document.execCommand('copy');
             copyHint.textContent = copied ? 'Ссылка скопирована в буфер обмена.' : 'Не удалось скопировать, сделай это вручную.';
+        });
+
+        fullBtn.addEventListener('click', () => {
+            if (lastFullUrl) {
+                setLinkOutput(lastFullUrl, 'Полная ссылка показана.');
+            }
         });
     </script>
 </body>

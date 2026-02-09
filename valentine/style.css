@@ -151,6 +151,18 @@ label {
     font-weight: 600;
 }
 
+.checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
 .image-block {
     display: grid;
     gap: 12px;
@@ -199,8 +211,27 @@ label {
     margin: 0 auto;
 }
 
+.valentine-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(260px, 1.2fr);
+    gap: 32px;
+    align-items: center;
+}
+
+.valentine-left {
+    display: grid;
+    gap: 20px;
+    justify-items: center;
+}
+
+.valentine-right {
+    display: grid;
+    gap: 24px;
+}
+
 input,
-textarea {
+textarea,
+select {
     font-family: "Manrope", sans-serif;
     font-size: 16px;
     padding: 14px 16px;
@@ -217,7 +248,8 @@ textarea {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.2);
@@ -378,6 +410,10 @@ textarea:focus {
 
     .brand {
         width: 100%;
+    }
+
+    .valentine-grid {
+        grid-template-columns: 1fr;
     }
 }
 
