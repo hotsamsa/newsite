@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Валентинка</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&family=Yeseva+One&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg">
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+        <div class="orb orb-c"></div>
+    </div>
+
+    <header class="header">
+        <a class="logo" href="./"><img src="assets/logo.png" alt="Логотип"></a>
+        <div class="brand">
+            <div class="eyebrow">14 февраля</div>
+            <h1>Виртуальные валентинки</h1>
+        </div>
+        <a class="btn ghost" href="./">Создать</a>
+    </header>
+
+    <main class="container">
+        <section class="card" id="viewer">
+            <div class="heart-wrap">
+                <div class="heart" aria-hidden="true"></div>
+                <div class="heart-glow" aria-hidden="true"></div>
+            </div>
+            <div class="image-preview card-image" id="cardImage" hidden>
+                <img id="cardImgTag" alt="Картинка валентинки">
+            </div>
+            <div class="message">
+                <div class="to" id="viewTo">Для тебя</div>
+                <div class="wish" id="viewWish">Ты делаешь этот мир ярче.</div>
+                <div class="from" id="viewFrom"></div>
+            </div>
+            <div class="cta">
+                <a class="btn" href="./">Создать свою валентинку</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span>Сделано с любовью горячей самсой</span>
+    </footer>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const toParam = params.get('to');
+        const wishParam = params.get('wish');
+        const fromParam = params.get('from');
+        const imgParam = params.get('img');
+
+        const viewTo = document.getElementById('viewTo');
+        const viewWish = document.getElementById('viewWish');
+        const viewFrom = document.getElementById('viewFrom');
+        const cardImage = document.getElementById('cardImage');
+        const cardImgTag = document.getElementById('cardImgTag');
+
+        if (toParam && wishParam) {
+            viewTo.textContent = `Для ${toParam}`;
+            viewWish.textContent = wishParam;
+            viewFrom.textContent = fromParam ? `От: ${fromParam}` : 'От: твой тайный поклонник';
+
+            if (imgParam) {
+                try {
+                    const url = new URL(imgParam);
+                    if (url.protocol === 'http:' || url.protocol === 'https:') {
+                        cardImgTag.src = url.toString();
+                        cardImage.hidden = false;
+                    }
+                } catch (error) {
+                    cardImage.hidden = true;
+                }
+            }
+        } else {
+            viewTo.textContent = 'Упс… валентинка не найдена';
+            viewWish.textContent = 'Ссылка неполная. Попроси отправителя переслать её снова.';
+            viewFrom.textContent = '';
+        }
+    </script>
+</body>
+</html>
