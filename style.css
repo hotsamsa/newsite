@@ -3,7 +3,7 @@
 body {
     font-family: "Unbounded", sans-serif;
     background-color: #ffffff;
-    cursor: url(assets/cursor.png);
+    cursor: url(assets/cursor.png), default;
 }
 
 .logo {
